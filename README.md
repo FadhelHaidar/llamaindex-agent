@@ -1,8 +1,8 @@
-# Setup Instructions
+# Description
 
-Follow these steps to set up and activate the environment for the project:
+*recommended python version **3.12.3***
 
-recommended python version **3.12.3**
+This repo is learning material for GenAI class, follow these steps to set up and activate the environment for the project:
 
 ## 1. Activate Conda Environment
 Activate your Conda environment by running the following command:
