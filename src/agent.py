@@ -9,7 +9,7 @@ def build_agent(verbose=False, max_iterations=5):
     agent = ReActAgent.from_tools(
         tools=TOOLS,
         verbose=verbose,
-        max_iterations=5,
+        max_iterations=max_iterations,
         context="You are an AI Assistant that will help answer questions about the world. always response in a friendly tone and answer the user greet",
     )
 

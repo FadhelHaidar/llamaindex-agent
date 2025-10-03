@@ -1,6 +1,13 @@
 from math import radians, sin, cos, sqrt, atan2
 from llama_index.core.tools import FunctionTool
+from pydantic import BaseModel, Field
 from src.utils import GAZETTEER
+
+class City(BaseModel):
+    city: str = Field(description="City name")
+
+class MultiCity(BaseModel):
+    cities: list[str] = Field(description="List of cities")
 
 # --- Tool 1: Geocode ---
 def local_geocode(city: str) -> dict:
@@ -12,6 +19,7 @@ def local_geocode(city: str) -> dict:
 
 geocode_tool = FunctionTool.from_defaults(
     fn=local_geocode,
+    fn_schema=City,
     name="local_geocode",
     description="Offline geocoder. Input: city (string). Returns lat/lon and country."
 )
@@ -29,12 +37,14 @@ def weather_sim(city: str) -> str:
 
 weather_tool = FunctionTool.from_defaults(
     fn=weather_sim,
+    fn_schema=City,
     name="weather_sim",
     description="Offline weather simulation. Input: city (string). Output: min/max °C."
 )
 
 # --- Tool 3: Distance in km ---
-def distance_km(city_a: str, city_b: str) -> str:
+def distance_km(cities: list[str]) -> str:
+    city_a, city_b = cities[0], cities[1]
     a = local_geocode(city_a)
     b = local_geocode(city_b)
     if "error" in a: 
@@ -52,6 +62,7 @@ def distance_km(city_a: str, city_b: str) -> str:
 
 distance_tool = FunctionTool.from_defaults(
     fn=distance_km,
+    fn_schema=MultiCity,
     name="distance_km",
     description="Great-circle distance between two cities in km."
 )
